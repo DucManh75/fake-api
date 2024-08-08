@@ -50,6 +50,12 @@ const Header = () => {
                 Register
               </a>
             </li>
+            <button className="btn">
+              <span className="icon">
+                <i className="fa-solid fa-bag-shopping"></i>
+              </span>
+              <span className="quantity">(0)</span>
+            </button>
           </ul>
         </nav>
       </div>

@@ -1,25 +1,28 @@
 import React, { useState } from "react";
 import "./Register.scss";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
-  const [form, setForm] = useState({
-    username: "",
-    email: "",
-    password: "",
-  });
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm({
-      ...form,
-      [name]: value,
-    });
-  };
+  const handleRegister = () => {
+    if (username === "" || password === "" || email === "") {
+      alert("Vui lòng không để trống");
+    } else {
+      const object = {
+        username: username,
+        email: email,
+        password: password,
+      };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Xử lý logic khi submit form, ví dụ: gửi dữ liệu đến server
-    console.log("Form submitted:", form);
+      const user = JSON.stringify(object);
+      localStorage.setItem(email, user);
+      alert("Đăng Ký Thành Công");
+      navigate("/login");
+    }
   };
 
   return (
@@ -34,43 +37,42 @@ const Register = () => {
                     Create an account
                   </h2>
 
-                  <form>
+                  <form onSubmit={handleRegister}>
                     <div data-mdb-input-init className="form-outline mb-4">
                       <input
                         type="text"
-                        id="form3Example1cg"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
                         className="form-control form-control-lg"
+                        required
                       />
-                      <label className="form-label" for="form3Example1cg">
-                        Your Name
-                      </label>
+                      <label className="form-label">Your Name</label>
                     </div>
 
                     <div data-mdb-input-init className="form-outline mb-4">
                       <input
                         type="email"
-                        id="form3Example3cg"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         className="form-control form-control-lg"
+                        required
                       />
-                      <label className="form-label" for="form3Example3cg">
-                        Your Email
-                      </label>
+                      <label className="form-label">Your Email</label>
                     </div>
 
                     <div data-mdb-input-init className="form-outline mb-4">
                       <input
                         type="password"
-                        id="form3Example4cg"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                         className="form-control form-control-lg"
                       />
-                      <label className="form-label" for="form3Example4cg">
-                        Password
-                      </label>
+                      <label className="form-label">Password</label>
                     </div>
 
                     <div className="d-flex justify-content-center">
                       <button
-                        type="button"
+                        type="submit"
                         data-mdb-button-init
                         data-mdb-ripple-init
                         className="btn btn-success btn-block btn-lg gradient-custom-4 text-body"

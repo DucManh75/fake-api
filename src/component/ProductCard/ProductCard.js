@@ -37,7 +37,7 @@ const ProductCard = () => {
                   <div className="product-price">{it.price}$</div>
                   <div class="product-links">
                     <Button className="button" variant="contained">
-                      Buy
+                      ADD TO CARD
                     </Button>
                   </div>
                 </div>

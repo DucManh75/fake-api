@@ -1,6 +1,26 @@
 import "./Login.scss";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    if (email === "" || password === "") {
+      alert("Vui lòng không để trống");
+    } else {
+      const user = JSON.parse(localStorage.getItem(email));
+      if (user && user.email === email && user.password === password) {
+        alert("Đăng Nhập Thành Công");
+        navigate("/");
+      } else {
+        alert("Đăng Nhập Thất Bại");
+      }
+    }
+  };
+
   return (
     <section className="vh-100 bg-image">
       <div className="mask d-flex align-items-center h-100 gradient-custom-3">
@@ -11,32 +31,32 @@ const Login = () => {
                 <div className="card-body p-5">
                   <h2 className="text-uppercase text-center mb-5">Login</h2>
 
-                  <form>
+                  <form onSubmit={handleLogin}>
                     <div data-mdb-input-init className="form-outline mb-4">
                       <input
-                        type="text"
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         id="form3Example1cg"
                         className="form-control form-control-lg"
                       />
-                      <label className="form-label" for="form3Example1cg">
-                        Your Email
-                      </label>
+                      <label className="form-label">Your Email</label>
                     </div>
 
                     <div data-mdb-input-init className="form-outline mb-4">
                       <input
-                        type="password"
                         id="form3Example4cg"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                         className="form-control form-control-lg"
                       />
-                      <label className="form-label" for="form3Example4cg">
-                        Password
-                      </label>
+                      <label className="form-label">Password</label>
                     </div>
 
                     <div className="d-flex justify-content-center">
                       <button
-                        type="button"
+                        type="submit"
                         data-mdb-button-init
                         data-mdb-ripple-init
                         className="btn btn-success btn-block btn-lg gradient-custom-4 text-body"
@@ -48,7 +68,7 @@ const Login = () => {
                     <p className="text-center text-muted mt-5 mb-0">
                       Don't have an account yet?
                       <a href="/register" className="fw-bold text-body">
-                        <u>Register for free</u>
+                        <u>&nbsp;Register for free</u>
                       </a>
                     </p>
                   </form>
