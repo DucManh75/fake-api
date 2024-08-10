@@ -1,51 +1,59 @@
-import { useEffect, useState } from "react";
-import { GetAllProduct } from "../../service/product";
 import "./ProductCard.scss";
 import Button from "@mui/material/Button";
-
+import { useGetAllProductsQuery } from "../../features/productApi";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../features/cartsSlice";
+import { useNavigate } from "react-router-dom";
 const ProductCard = () => {
-  const [product, setProduct] = useState([]);
-
-  useEffect(() => {
-    GetProduct();
-  }, []);
-
-  const GetProduct = async () => {
-    let res = await GetAllProduct();
-    if (res && res.data) {
-      setProduct(res.data);
-    }
+  const { data, isLoading, error } = useGetAllProductsQuery();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleAddToCard = (product) => {
+    dispatch(addToCart(product));
+    navigate("/cart");
   };
 
   return (
     <>
-      <section className="product-card">
-        {product.map((it, idx) => {
-          return (
-            <div className="wrapper " key={`productcard-${idx}`}>
-              <div className="badge">Hot</div>
-              <div className="product-tumb">
-                <img src={it.image} alt="" />
-              </div>
-              <div className="product-details">
-                <span className="product-catagory">{it.category}</span>
-                <h4>
-                  <a href="/">{it.title}</a>
-                </h4>
-                <p>{it.description}</p>
-                <div className="product-bottom-details">
-                  <div className="product-price">{it.price}$</div>
-                  <div class="product-links">
-                    <Button className="button" variant="contained">
-                      ADD TO CARD
-                    </Button>
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p>An error occured...</p>
+      ) : (
+        <>
+          <div className="product-card">
+            {data?.map((product) => {
+              return (
+                <div className="wrapper " key={product.id}>
+                  <div className="badge">Hot</div>
+                  <div className="product-tumb">
+                    <img src={product.image} alt={product.title} />
+                  </div>
+                  <div className="product-details">
+                    <span className="product-catagory">{product.category}</span>
+                    <h4>
+                      <a href="/">{product.title}</a>
+                    </h4>
+                    <p>{product.description}</p>
+                    <div className="product-bottom-details">
+                      <div className="product-price">{product.price}$</div>
+                      <div className="product-links">
+                        <Button
+                          onClick={() => handleAddToCard(product)}
+                          className="button"
+                          variant="contained"
+                        >
+                          ADD TO CARD
+                        </Button>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          );
-        })}
-      </section>
+              );
+            })}
+          </div>
+        </>
+      )}
     </>
   );
 };
